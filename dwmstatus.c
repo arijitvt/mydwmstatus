@@ -91,6 +91,17 @@ loadavg(void)
 	}
 
 	return smprintf("%.2f %.2f %.2f", avgs[0], avgs[1], avgs[2]);
+}    
+
+extern int audio_volume(long*);
+
+long getVolume() {
+	long vol= -1;
+	int result = audio_volume(&vol);
+	if(result == 0 ) {
+		return vol;
+	}
+	return -1;
 }
 
 int
@@ -98,36 +109,28 @@ main(void)
 {
 	char *status;
 	char *avgs;
-	char *tmar;
-	char *tmutc;
 	char *tmbln;
+
+	char *name = "Arijit";
 
 	if (!(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "dwmstatus: cannot open display.\n");
 		return 1;
 	}
 
-	for (;;sleep(90)) {
+	for (;;sleep(60)) {
 		avgs = loadavg();
-	       /* tmar = mktimes("%H:%M", tzargentina);
-		tmutc = mktimes("%H:%M", tzutc);
-		tmbln = mktimes("KW %W %a %d %b %H:%M %Z %Y", tzberlin);
-                 
-		status = smprintf("L:%s A:%s U:%s %s",
-				avgs, tmar, tmutc, tmbln);
-                 */
+		long vol = getVolume();
 		tmbln = mktimes("KW %W %a %d %b %H:%M %Z %Y", tzamerica);
-		status = smprintf("%s",
-				tmbln);
+		status = smprintf("[%s] [vol:%ld]  %s",
+				name,vol,tmbln);
 		setstatus(status);
 		free(avgs);
-	       /* free(tmar);
-		free(tmutc);*/
 		free(tmbln);
 		free(status);
 	}
 
-	XCloseDisplay(dpy);
+        XCloseDisplay(dpy);
 
 	return 0;
 }

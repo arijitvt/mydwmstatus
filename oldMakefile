@@ -6,9 +6,7 @@ SRC = al.c \
       dwmstatus.c \
 
 	
-#OBJ = ${SRC:.c=.o}
-objs = al.o dwmstatus.o
-
+OBJ = ${SRC:.c=.o}
 
 #all: options ${NAME}  
 all: options dwmstatus 
@@ -19,19 +17,13 @@ options:
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CC       = ${CC}"
 
-al.o:al.c
-	$(CC) -c al.c -o al.o
-
-dwmstatus.o:dwmstatus.c
-	@${CC} -c ${CFLAGS} dwmstatus.c -o dwmstatus.o
-
-#.c.o:
-#	@echo CC $<
- #       @${CC} -c ${CFLAGS} $<
+.c.o:
+	@echo CC $<
+	@${CC} -c ${CFLAGS} $<
 
 ${OBJ}: config.mk al
 
-dwmstatus: ${objs}
+dwmstatus: ${OBJ}
 	@echo CC -o $@
 	${CC} -o $@ *.o ${LDFLAGS}
 
