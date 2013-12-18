@@ -13,9 +13,6 @@
 #include <X11/Xlib.h>
 
 char *tzamerica="America/New_York";
-char *tzargentina = "America/Buenos_Aires";
-char *tzutc = "UTC";
-char *tzberlin = "Europe/Berlin";
 
 static Display *dpy;
 

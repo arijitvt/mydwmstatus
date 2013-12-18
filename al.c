@@ -55,7 +55,7 @@ int audio_volume(long* outvol)
 	long minv, maxv;
 
 	snd_mixer_selem_get_playback_volume_range (elem, &minv, &maxv);
-	fprintf(stderr, "Volume range <%i,%i>\n", minv, maxv);
+	//fprintf(stderr, "Volume range <%i,%i>\n", minv, maxv);
 
 	if(action == AUDIO_VOLUME_GET) {
 		if(snd_mixer_selem_get_playback_volume(elem, 0, outvol) < 0) {
