@@ -12,9 +12,7 @@
 
 #include <X11/Xlib.h>
 
-char *tzamerica="America/New_York";
-
-static Display *dpy;
+#include "common.h"
 
 char *
 smprintf(char *fmt, ...)
@@ -90,7 +88,6 @@ loadavg(void)
 	return smprintf("%.2f %.2f %.2f", avgs[0], avgs[1], avgs[2]);
 }    
 
-extern int audio_volume(long*);
 
 long getVolume() {
 	long vol= -1;
@@ -101,6 +98,10 @@ long getVolume() {
 	return -1;
 }
 
+void getCurrentUser(char *user) {
+	strcpy(user,getenv("USER"));
+}
+
 int
 main(void)
 {
@@ -108,7 +109,7 @@ main(void)
 	char *avgs;
 	char *tmbln;
 
-	char *name = "Arijit";
+	char user[100] = {'\0'};
 
 	if (!(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "dwmstatus: cannot open display.\n");
@@ -118,9 +119,10 @@ main(void)
 	for (;;sleep(60)) {
 		avgs = loadavg();
 		long vol = getVolume();
-		tmbln = mktimes("KW %W %a %d %b %H:%M %Z %Y", tzamerica);
+		getCurrentUser(user);
+		tmbln = mktimes("%a %d %b %H:%M %Z %Y", tzamerica);
 		status = smprintf("[%s] [vol:%ld]  %s",
-				name,vol,tmbln);
+				user,vol,tmbln);
 		setstatus(status);
 		free(avgs);
 		free(tmbln);

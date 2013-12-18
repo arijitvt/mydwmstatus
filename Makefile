@@ -19,48 +19,21 @@ options:
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CC       = ${CC}"
 
-al.o:al.c
+al.o:al.c common.h
 	$(CC) -c al.c -o al.o
 
-dwmstatus.o:dwmstatus.c
+dwmstatus.o:dwmstatus.c common.h
 	@${CC} -c ${CFLAGS} dwmstatus.c -o dwmstatus.o
 
-#.c.o:
-#	@echo CC $<
- #       @${CC} -c ${CFLAGS} $<
-
-${OBJ}: config.mk al
 
 dwmstatus: ${objs}
 	@echo CC -o $@
 	${CC} -o $@ *.o ${LDFLAGS}
 
-${NAME}: ${OBJ}
-	@echo CC -o $@
-	${CC} -o $@ *.o ${LDFLAGS}
-	#@${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 clean:
 	@echo cleaning
-	@rm -f ${NAME} ${OBJ} ${NAME}-${VERSION}.tar.gz
+	@rm -f ${NAME} ${objs}
 
-dist: clean
-	@echo creating dist tarball
-	@mkdir -p ${NAME}-${VERSION}
-	@cp -R Makefile config.mk LICENSE \
-		${SRC} ${NAME}-${VERSION}
-	@tar -cf ${NAME}-${VERSION}.tar ${NAME}-${VERSION}
-	@gzip ${NAME}-${VERSION}.tar
-	@rm -rf ${NAME}-${VERSION}
 
-install: all
-	@echo installing executable file to ${DESTDIR}${PREFIX}/bin
-	@mkdir -p ${DESTDIR}${PREFIX}/bin
-	@cp -f ${NAME} ${DESTDIR}${PREFIX}/bin
-	@chmod 755 ${DESTDIR}${PREFIX}/bin/${NAME}
-
-uninstall:
-	@echo removing executable file from ${DESTDIR}${PREFIX}/bin
-	@rm -f ${DESTDIR}${PREFIX}/bin/${NAME}
-
-.PHONY: all options clean dist install uninstall
+.PHONY: all options clean 
